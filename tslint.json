@@ -1,0 +1,60 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "array-type": false,
+        "arrow-parens": false,
+        "ban-types": false,
+        "callable-types": false,
+        "comment-format": false,
+        "forin": false,
+        "interface-name": false,
+        "interface-over-type-literal": false,
+        "jsdoc-format": false,
+        "max-classes-per-file": false,
+        "max-line-length": false,
+        "member-ordering": false,
+        "no-any-declaration": true,
+        "no-bitwise": false,
+        "no-conditional-assignment": false,
+        "no-console": [true, "log"],
+        "no-empty": [true, "allow-empty-functions", "allow-empty-catch"],
+        "no-empty-interface": false,
+        "no-shadowed-variable": false,
+        "no-var-requires": false,
+        "object-literal-shorthand": false,
+        "object-literal-sort-keys": false,
+        "only-arrow-functions": [true, "allow-named-functions"],
+        "ordered-imports": false,
+        "prefer-for-of": false,
+        "quotemark": false,
+        "radix": false,
+        "semicolon": false,
+        "space-before-function-paren": [
+            true,
+            {
+                "anonymous": "always"
+            }
+        ],
+        "trailing-comma": [
+            true,
+            {
+                "singleline": "never",
+                "multiline": {
+                    "objects": "always",
+                    "arrays": "always",
+                    "functions": "never",
+                    "typeLiterals": "ignore"
+                }
+            }
+        ],
+        "triple-equals": false,
+        "variable-name": [true, "check-format", "allow-pascal-case"]
+    },
+    "rulesDirectory": [
+        "src"
+    ]
+}

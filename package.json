@@ -1,0 +1,26 @@
+{
+  "name": "ysds-tslint",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "ts-node ./node_modules/.bin/tslint --rules-dir src/ --test tests/**/tslint.json",
+    "tslint": "ts-node ./node_modules/.bin/tslint src/**/*.ts"
+  },
+  "contributors": [
+    {
+      "name": "Johan Björk",
+      "email": "johan@vinnia.se"
+    }
+  ],
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "devDependencies": {
+    "@types/node": "^11.13.0",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.1"
+  }
+}

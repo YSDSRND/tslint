@@ -1,0 +1,43 @@
+const x: any = 1
+         ~~~ [0]
+
+const x: Array<any> = []
+               ~~~ [0]
+
+const x: { a: any, b: any } = { a: 1, b: 2 }
+              ~~~ [0]
+                      ~~~ [0]
+
+function x(a: any) {
+              ~~~ [0]
+}
+
+function x(): any {
+              ~~~ [0]
+}
+
+class X {
+  public y(z: any) {
+              ~~~ [0]
+  }
+}
+
+interface X {
+  a: any
+     ~~~ [0]
+}
+
+const x = [] as any
+
+const x = [] as Array<any>
+
+const x = { a: 1 } as { a: any }
+
+function x<T extends any>(arg: T) {
+                     ~~~ [0]
+}
+
+function x<T extends any[]>(...args: T) {
+}
+
+[0]: Do not use 'any' as a type declaration. Use a more specific type or '{}' if you do not care about type information.
