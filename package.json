@@ -4,6 +4,7 @@
   "description": "",
   "main": "",
   "scripts": {
+    "build": "tsc",
     "test": "ts-node ./node_modules/.bin/tslint --rules-dir src/ --test tests/**/tslint.json",
     "tslint": "ts-node ./node_modules/.bin/tslint src/**/*.ts"
   },
@@ -15,7 +16,7 @@
   ],
   "license": "MIT",
   "files": [
-    "src"
+    "dist"
   ],
   "devDependencies": {
     "@types/node": "^11.13.0",
