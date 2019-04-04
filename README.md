@@ -31,3 +31,16 @@ const x = { a: 1 } as { a: any }
 function x<T extends any[]>(...args: T) {
 }
 ```
+
+## block-nesting
+Prevent excessive block nesting. Function blocks reset the depth counter. Maximum
+nesting depth is configurable.
+```typescript
+if (true) {
+  if (true) {
+    // nope (when max depth is set to 2)
+    if (true) {
+    }
+  }
+}
+```

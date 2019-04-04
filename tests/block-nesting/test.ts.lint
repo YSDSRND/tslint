@@ -1,0 +1,60 @@
+if (true) {
+  if (true) {
+            ~ [0]
+    if (true) {
+              ~ [0]
+    }
+  }
+}
+
+function x() {
+  function y() {
+    function z() {
+    }
+  }
+}
+
+function x() {
+  if (true) {
+    if (true) {
+              ~ [0]
+    }
+  }
+  function y() {
+    if (true) {
+      if (true) {
+                ~ [0]
+      }
+    }
+  }
+}
+
+const x = () => {
+  if (true) {
+  }
+  const y = () => {
+    const z = () => {}
+  }
+}
+
+const x = () => {
+  const y = () => {
+    if (true) {
+      if (true) {
+                ~ [0]
+      }
+    }
+  }
+}
+
+class X {
+  public y() {
+    if (true) {
+      if (true) {
+                ~ [0]
+      }
+    }
+  }
+}
+
+[0]: Excessive block nesting (maximum 1). Reduce nesting to improve code readability.
