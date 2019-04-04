@@ -33,21 +33,25 @@ function walk(ctx) {
     var maxDepth = ctx.options.ruleArguments[0] || DEFAULT_MAX_DEPTH;
     return ts.forEachChild(ctx.sourceFile, function callback(node) {
         var isFunctionLike = ts.isFunctionLike(node);
+        var shouldTouchCounter = node.kind === ts.SyntaxKind.Block && !ts.isFunctionLike(node.parent);
         // functions reset the block nest counter.
         if (isFunctionLike) {
             depthStack.push(0);
         }
+        var idx = depthStack.length - 1;
         // if we found a block and its immediate parent is not
         // a function, lets increment the block depth and make
         // sure we're not in too deep.
-        if (node.kind === ts.SyntaxKind.Block && !ts.isFunctionLike(node.parent)) {
-            var idx = depthStack.length - 1;
+        if (shouldTouchCounter) {
             depthStack[idx] += 1;
             if (depthStack[idx] > maxDepth) {
                 ctx.addFailureAt(node.getStart(), 1, FAILURE_STRING.replace('%d', maxDepth));
             }
         }
         ts.forEachChild(node, callback);
+        if (shouldTouchCounter) {
+            depthStack[idx] -= 1;
+        }
         if (isFunctionLike) {
             depthStack.pop();
         }

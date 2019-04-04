@@ -16,17 +16,19 @@ function walk(ctx: Lint.WalkContext<Lint.IOptions>): void {
 
     return ts.forEachChild(ctx.sourceFile, function callback(node: ts.Node): void {
         const isFunctionLike = ts.isFunctionLike(node)
+        const shouldTouchCounter = node.kind === ts.SyntaxKind.Block && !ts.isFunctionLike(node.parent)
 
         // functions reset the block nest counter.
         if (isFunctionLike) {
             depthStack.push(0)
         }
 
+        const idx = depthStack.length - 1
+
         // if we found a block and its immediate parent is not
         // a function, lets increment the block depth and make
         // sure we're not in too deep.
-        if (node.kind === ts.SyntaxKind.Block && !ts.isFunctionLike(node.parent)) {
-            const idx = depthStack.length - 1
+        if (shouldTouchCounter) {
             depthStack[idx] += 1
 
             if (depthStack[idx] > maxDepth) {
@@ -37,6 +39,10 @@ function walk(ctx: Lint.WalkContext<Lint.IOptions>): void {
         }
 
         ts.forEachChild(node, callback)
+
+        if (shouldTouchCounter) {
+            depthStack[idx] -= 1
+        }
 
         if (isFunctionLike) {
             depthStack.pop()
