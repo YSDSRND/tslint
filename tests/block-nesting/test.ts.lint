@@ -57,4 +57,22 @@ class X {
   }
 }
 
+class X {
+  constructor() {
+    if (true) {
+      if (true) {
+                ~ [0]
+      }
+    }
+  }
+}
+
+const a = {
+  b: {
+    c: {
+      d: {}
+    }
+  }
+}
+
 [0]: Excessive block nesting (maximum 1). Reduce nesting to improve code readability.
