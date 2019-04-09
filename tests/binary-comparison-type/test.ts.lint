@@ -1,29 +1,29 @@
 function x(value: string): boolean {
   return value > 5
-         ~~~~~ [0]
+         ~~~~~~~~~  [0]
 }
 
 'yee' > 5
-~~~~~ [0]
+~~~~~~~~~ [0]
 
 const aaa = {}
 aaa > 5
 
 const bbb: {} = {}
 bbb > 5
-~~~ [0]
+~~~~~~~ [0]
 
 const ccc = {}
 5 > ccc
 
 const ccc: {} = {}
 5 > ccc
-    ~~~ [0]
+~~~~~~~ [0]
 
 class X {
   constructor(ddd: string) {
     ddd > 5
-    ~~~ [0]
+    ~~~~~~~ [0]
   }
 }
 
@@ -34,21 +34,20 @@ class X {
 }
 
 const fff = {} > 5
-            ~~ [0]
+            ~~~~~~ [0]
 
 const ggg = 5 > {}
-                ~~ [0]
+            ~~~~~~ [0]
 
 const hhh = [] > 5
-            ~~ [0]
+            ~~~~~~ [0]
 
 const iii = {} > {}
-            ~~ [0]
-                 ~~ [0]
+            ~~~~~~~ [0]
 
 function yee(a: string, b: number) {
   return a > b
-         ~ [0]
+         ~~~~~ [0]
 }
 
-[0]: Binary operator ">" can only be applied to type "number"
+[0]: Binary operator ">" can only be applied to operands of type "number"

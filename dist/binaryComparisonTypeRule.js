@@ -83,7 +83,7 @@ function isValidNumericComparison(identifierTypes, node) {
     return true;
 }
 function buildFailure(operator) {
-    return "Binary operator \"" + operator.getText() + "\" can only be applied to type \"number\"";
+    return "Binary operator \"" + operator.getText() + "\" can only be applied to operands of type \"number\"";
 }
 function walk(ctx) {
     var identifierTypes = {};
@@ -107,10 +107,10 @@ function walk(ctx) {
             var expr = node.parent;
             for (var _i = 0, _a = [expr.left, expr.right]; _i < _a.length; _i++) {
                 var node_1 = _a[_i];
-                if (isValidNumericComparison(identifierTypes, node_1)) {
-                    continue;
+                if (!isValidNumericComparison(identifierTypes, node_1)) {
+                    ctx.addFailureAtNode(expr, buildFailure(expr.operatorToken));
+                    break;
                 }
-                ctx.addFailureAtNode(node_1, buildFailure(expr.operatorToken));
             }
             return;
         }

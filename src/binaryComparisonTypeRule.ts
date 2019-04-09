@@ -76,7 +76,7 @@ function isValidNumericComparison(identifierTypes: TypeNodeMap, node: ts.Node): 
 }
 
 function buildFailure(operator: ts.BinaryOperatorToken): string {
-    return `Binary operator "${operator.getText()}" can only be applied to type "number"`
+    return `Binary operator "${operator.getText()}" can only be applied to operands of type "number"`
 }
 
 function walk(ctx: Lint.WalkContext<{}>): void {
@@ -107,12 +107,12 @@ function walk(ctx: Lint.WalkContext<{}>): void {
             const expr = node.parent as ts.BinaryExpression
 
             for (const node of [expr.left, expr.right]) {
-                if (isValidNumericComparison(identifierTypes, node)) {
-                    continue
+                if (!isValidNumericComparison(identifierTypes, node)) {
+                    ctx.addFailureAtNode(
+                        expr, buildFailure(expr.operatorToken)
+                    )
+                    break
                 }
-                ctx.addFailureAtNode(
-                    node, buildFailure(expr.operatorToken)
-                )
             }
 
             return
