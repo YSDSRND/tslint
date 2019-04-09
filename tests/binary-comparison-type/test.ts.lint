@@ -3,6 +3,11 @@ function x(value: string): boolean {
          ~~~~~~~~~  [0]
 }
 
+function y(value: {}): boolean {
+  return value > 5
+         ~~~~~~~~~ [0]
+}
+
 'yee' > 5
 ~~~~~~~~~ [0]
 
