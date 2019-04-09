@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "binary-comparison-type": true
+  }
+}
