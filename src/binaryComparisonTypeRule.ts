@@ -65,9 +65,9 @@ function isValidNumericComparison(identifierTypes: TypeNodeMap, node: ts.Node): 
     // if the operand is an identifier, we try to determine
     // its type. if that fails we can't do much more.
     if (ts.isIdentifier(node)) {
-        const typeOfA = identifierTypes[node.text]
+        const type = identifierTypes[node.text]
 
-        if (typeof typeOfA !== 'undefined' && !isNumberLike(typeOfA)) {
+        if (typeof type !== 'undefined' && !isNumberLike(type)) {
             return false
         }
     }
