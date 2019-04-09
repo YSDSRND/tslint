@@ -91,17 +91,12 @@ function walk(ctx) {
         // if we find an identifier we check if this
         // is its initial declaration. if that is the
         // case, we cache its type node.
-        if (node.kind === ts.SyntaxKind.Identifier) {
-            var isDeclarationLike = ts.isParameter(node.parent) || ts.isVariableDeclaration(node.parent);
-            if (!isDeclarationLike) {
-                return;
-            }
-            var decl = node.parent;
+        if (ts.isParameter(node) || ts.isVariableDeclaration(node)) {
+            var decl = node;
             var name_1 = decl.name;
             if (decl.type && ts.isIdentifier(name_1)) {
                 identifierTypes[name_1.text] = decl.type;
             }
-            return;
         }
         if (isBinaryComparisonOperator(node)) {
             var expr = node.parent;

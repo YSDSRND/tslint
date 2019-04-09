@@ -86,21 +86,13 @@ function walk(ctx: Lint.WalkContext<{}>): void {
         // if we find an identifier we check if this
         // is its initial declaration. if that is the
         // case, we cache its type node.
-        if (node.kind === ts.SyntaxKind.Identifier) {
-            const isDeclarationLike = ts.isParameter(node.parent) || ts.isVariableDeclaration(node.parent)
-
-            if (!isDeclarationLike) {
-                return
-            }
-
-            const decl = node.parent as ts.ParameterDeclaration | ts.VariableDeclaration
+        if (ts.isParameter(node) || ts.isVariableDeclaration(node)) {
+            const decl = node
             const name = decl.name
 
             if (decl.type && ts.isIdentifier(name)) {
                 identifierTypes[name.text] = decl.type
             }
-
-            return
         }
 
         if (isBinaryComparisonOperator(node)) {
