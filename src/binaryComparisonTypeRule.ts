@@ -54,6 +54,12 @@ function isLiteralLike(node: ts.Node): boolean {
         || node.kind === ts.SyntaxKind.ArrayLiteralExpression
 }
 
+function isScopeLike(node: ts.Node): boolean {
+    return ts.isBlock(node)
+        || node.kind === ts.SyntaxKind.FunctionDeclaration
+        || node.kind === ts.SyntaxKind.ClassDeclaration
+}
+
 function isValidNumericComparison(typeStack: ReadonlyArray<TypeNodeMap>, node: ts.Node): boolean {
     // if the operand is a literal we can actually
     // make a definitive decision whether this comparison
@@ -98,9 +104,9 @@ function walk(ctx: Lint.WalkContext<{}>): void {
     const typeStack: Array<TypeNodeMap> = [{}]
 
     return ts.forEachChild(ctx.sourceFile, function callback(node: ts.Node): void {
-        const isBlock = ts.isBlock(node)
+        const isScope = isScopeLike(node)
 
-        if (isBlock) {
+        if (isScope) {
             typeStack.push({})
         }
 
@@ -133,7 +139,7 @@ function walk(ctx: Lint.WalkContext<{}>): void {
 
         ts.forEachChild(node, callback)
 
-        if (isBlock) {
+        if (isScope) {
             typeStack.pop()
         }
     })

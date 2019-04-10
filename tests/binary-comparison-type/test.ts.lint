@@ -71,4 +71,10 @@ class X {
   }
 }
 
+function yee() {
+  const a = 1
+  const b = 1
+  a > b
+}
+
 [0]: Binary operator ">" can only be applied to operands of type "number"

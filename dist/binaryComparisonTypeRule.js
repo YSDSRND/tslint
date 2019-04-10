@@ -65,6 +65,11 @@ function isLiteralLike(node) {
         || node.kind === ts.SyntaxKind.ObjectLiteralExpression
         || node.kind === ts.SyntaxKind.ArrayLiteralExpression;
 }
+function isScopeLike(node) {
+    return ts.isBlock(node)
+        || node.kind === ts.SyntaxKind.FunctionDeclaration
+        || node.kind === ts.SyntaxKind.ClassDeclaration;
+}
 function isValidNumericComparison(typeStack, node) {
     // if the operand is a literal we can actually
     // make a definitive decision whether this comparison
@@ -101,8 +106,8 @@ function buildFailure(operator) {
 function walk(ctx) {
     var typeStack = [{}];
     return ts.forEachChild(ctx.sourceFile, function callback(node) {
-        var isBlock = ts.isBlock(node);
-        if (isBlock) {
+        var isScope = isScopeLike(node);
+        if (isScope) {
             typeStack.push({});
         }
         // if we find an identifier we check if this
@@ -127,7 +132,7 @@ function walk(ctx) {
             return;
         }
         ts.forEachChild(node, callback);
-        if (isBlock) {
+        if (isScope) {
             typeStack.pop();
         }
     });
