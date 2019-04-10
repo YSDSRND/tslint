@@ -71,4 +71,7 @@ enum Z {
 Z.A > 5
 ~~~~~~~ [0]
 
+const jjj: any = 1
+jjj > 5
+
 [0]: Binary operator ">" can only be applied to operands of type "number"

@@ -36,6 +36,7 @@ function walk(ctx: Lint.WalkContext<{}>, program: ts.Program): void {
 
             for (const node of [expr.left, expr.right]) {
                 const type = checker.getTypeAtLocation(node)
+                const isAny = (type.flags & ts.TypeFlags.Any) > 0
                 const isEnum = (type.flags & ts.TypeFlags.EnumLike) > 0
                 const isNumber = (type.flags & ts.TypeFlags.NumberLike) > 0
 
@@ -43,7 +44,7 @@ function walk(ctx: Lint.WalkContext<{}>, program: ts.Program): void {
                 // are treated as numbers which means you can assign
                 // a number to an enum. we do not want enums to
                 // be comparable to numbers so exclude them.
-                if (isEnum || !isNumber) {
+                if (!isAny && (isEnum || !isNumber)) {
                     ctx.addFailureAtNode(
                         expr, FAILURE_STRING.replace('%s', expr.operatorToken.getText())
                     )

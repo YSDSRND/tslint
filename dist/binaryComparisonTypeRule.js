@@ -51,13 +51,14 @@ function walk(ctx, program) {
             for (var _i = 0, _a = [expr.left, expr.right]; _i < _a.length; _i++) {
                 var node_1 = _a[_i];
                 var type = checker.getTypeAtLocation(node_1);
+                var isAny = (type.flags & ts.TypeFlags.Any) > 0;
                 var isEnum = (type.flags & ts.TypeFlags.EnumLike) > 0;
                 var isNumber = (type.flags & ts.TypeFlags.NumberLike) > 0;
                 // enums are a special case in typescript. they
                 // are treated as numbers which means you can assign
                 // a number to an enum. we do not want enums to
                 // be comparable to numbers so exclude them.
-                if (isEnum || !isNumber) {
+                if (!isAny && (isEnum || !isNumber)) {
                     ctx.addFailureAtNode(expr, FAILURE_STRING.replace('%s', expr.operatorToken.getText()));
                     break;
                 }
