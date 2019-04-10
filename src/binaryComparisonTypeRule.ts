@@ -54,7 +54,7 @@ function isLiteralLike(node: ts.Node): boolean {
         || node.kind === ts.SyntaxKind.ArrayLiteralExpression
 }
 
-function isValidNumericComparison(identifierTypes: TypeNodeMap, node: ts.Node): boolean {
+function isValidNumericComparison(typeStack: ReadonlyArray<TypeNodeMap>, node: ts.Node): boolean {
     // if the operand is a literal we can actually
     // make a definitive decision whether this comparison
     // is valid.
@@ -62,10 +62,14 @@ function isValidNumericComparison(identifierTypes: TypeNodeMap, node: ts.Node): 
         return isNumberLike(node)
     }
 
+    if (ts.isPropertyAccessExpression(node)) {
+        node = node.name
+    }
+
     // if the operand is an identifier, we try to determine
     // its type. if that fails we can't do much more.
     if (ts.isIdentifier(node)) {
-        const type = identifierTypes[node.text]
+        const type = resolveType(typeStack, node)
 
         if (typeof type !== 'undefined' && !isNumberLike(type)) {
             return false
@@ -75,23 +79,40 @@ function isValidNumericComparison(identifierTypes: TypeNodeMap, node: ts.Node): 
     return true
 }
 
+function resolveType(typeStack: ReadonlyArray<TypeNodeMap>, node: ts.Identifier): ts.TypeNode | undefined {
+    // loop backwards so we check closest block first.
+    for (let i = typeStack.length - 1; i >= 0; --i) {
+        const types = typeStack[i]
+        if (types[node.text]) {
+            return types[node.text]
+        }
+    }
+    return undefined
+}
+
 function buildFailure(operator: ts.BinaryOperatorToken): string {
     return `Binary operator "${operator.getText()}" can only be applied to operands of type "number"`
 }
 
 function walk(ctx: Lint.WalkContext<{}>): void {
-    const identifierTypes: TypeNodeMap = {}
+    const typeStack: Array<TypeNodeMap> = [{}]
 
     return ts.forEachChild(ctx.sourceFile, function callback(node: ts.Node): void {
+        const isBlock = ts.isBlock(node)
+
+        if (isBlock) {
+            typeStack.push({})
+        }
+
         // if we find an identifier we check if this
         // is its initial declaration. if that is the
         // case, we cache its type node.
-        if (ts.isParameter(node) || ts.isVariableDeclaration(node)) {
+        if (ts.isParameter(node) || ts.isVariableDeclaration(node) || ts.isPropertyDeclaration(node)) {
             const decl = node
             const name = decl.name
 
             if (decl.type && ts.isIdentifier(name)) {
-                identifierTypes[name.text] = decl.type
+                typeStack[typeStack.length - 1][name.text] = decl.type
             }
         }
 
@@ -99,7 +120,7 @@ function walk(ctx: Lint.WalkContext<{}>): void {
             const expr = node.parent as ts.BinaryExpression
 
             for (const node of [expr.left, expr.right]) {
-                if (!isValidNumericComparison(identifierTypes, node)) {
+                if (!isValidNumericComparison(typeStack, node)) {
                     ctx.addFailureAtNode(
                         expr, buildFailure(expr.operatorToken)
                     )
@@ -109,6 +130,11 @@ function walk(ctx: Lint.WalkContext<{}>): void {
 
             return
         }
-        return ts.forEachChild(node, callback)
+
+        ts.forEachChild(node, callback)
+
+        if (isBlock) {
+            typeStack.pop()
+        }
     })
 }

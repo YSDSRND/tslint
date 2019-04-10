@@ -55,4 +55,20 @@ function yee(a: string, b: number) {
          ~~~~~ [0]
 }
 
+class X {
+  private a: {} = {}
+  public yee() {
+    this.a > 5
+    ~~~~~~~~~~ [0]
+  }
+}
+
+class X {
+  private a: {} = {}
+  public yee() {
+    const a: number = 5
+    a > 5
+  }
+}
+
 [0]: Binary operator ">" can only be applied to operands of type "number"
