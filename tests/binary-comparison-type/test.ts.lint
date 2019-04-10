@@ -1,18 +1,11 @@
-function x(value: string): boolean {
-  return value > 5
-         ~~~~~~~~~  [0]
-}
-
 function y(value: {}): boolean {
   return value > 5
          ~~~~~~~~~ [0]
 }
 
-'yee' > 5
-~~~~~~~~~ [0]
-
 const aaa = {}
 aaa > 5
+~~~~~~~ [0]
 
 const bbb: {} = {}
 bbb > 5
@@ -20,17 +13,14 @@ bbb > 5
 
 const ccc = {}
 5 > ccc
+~~~~~~~ [0]
 
 const ccc: {} = {}
 5 > ccc
 ~~~~~~~ [0]
 
-class X {
-  constructor(ddd: string) {
-    ddd > 5
-    ~~~~~~~ [0]
-  }
-}
+const ddd = 5
+ddd > 5
 
 class X {
   constructor(eee: number) {
@@ -50,11 +40,6 @@ const hhh = [] > 5
 const iii = {} > {}
             ~~~~~~~ [0]
 
-function yee(a: string, b: number) {
-  return a > b
-         ~~~~~ [0]
-}
-
 class X {
   private a: {} = {}
   public yee() {
@@ -68,6 +53,9 @@ class X {
   public yee() {
     const a: number = 5
     a > 5
+
+    this.a > a
+    ~~~~~~~~~~ [0]
   }
 }
 
@@ -76,5 +64,11 @@ function yee() {
   const b = 1
   a > b
 }
+
+enum Z {
+  A, B
+}
+Z.A > 5
+~~~~~~~ [0]
 
 [0]: Binary operator ">" can only be applied to operands of type "number"

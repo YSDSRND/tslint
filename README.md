@@ -2,8 +2,8 @@
 A collection of tslint rules used by YSDS.
 
 ## binary-comparison-type
-Disallows binary comparisons where operands are not numbers. Only works for literal
-values and identifiers with a declared type.
+Disallows binary comparisons where operands are not numbers. This rule requires tslint to be executed with
+the type checker enabled (tslint -p tsconfig.json).
 ```typescript
 // nope
 'yee' > 'a'
@@ -18,7 +18,7 @@ values and identifiers with a declared type.
 const x: string = 'yee'
 x > 5
 
-// OK, inferred string literal so we can't detect this without type information.
+// nope
 const x = 'yee'
 x > 5
 
