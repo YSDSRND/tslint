@@ -52,7 +52,7 @@ function walk(ctx) {
                 isNodeTypeParameterForRestArguments(node)) {
                 return;
             }
-            return ctx.addFailureAtNode(node, Rule.FAILURE_STRING, new Lint.Replacement(node.getStart(), node.getWidth(), '{}'));
+            return ctx.addFailureAtNode(node, Rule.FAILURE_STRING, new Lint.Replacement(node.getStart(), node.getWidth(), 'unknown'));
         }
         return ts.forEachChild(node, callback);
     });

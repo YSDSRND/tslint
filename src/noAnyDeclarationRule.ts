@@ -40,7 +40,7 @@ function walk(ctx: Lint.WalkContext<{}>): void {
             return ctx.addFailureAtNode(
                 node,
                 Rule.FAILURE_STRING,
-                new Lint.Replacement(node.getStart(), node.getWidth(), '{}')
+                new Lint.Replacement(node.getStart(), node.getWidth(), 'unknown')
             )
         }
         return ts.forEachChild(node, callback)
