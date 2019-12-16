@@ -45,11 +45,18 @@ function isNodeTypeParameterForRestArguments(node) {
     return node.parent.kind === ts.SyntaxKind.ArrayType
         && node.parent.parent.kind === ts.SyntaxKind.TypeParameter;
 }
+function isNodePartOfRestArguments(node) {
+    while (node && !ts.isParameter(node)) {
+        node = node.parent;
+    }
+    return node && typeof node.dotDotDotToken !== 'undefined';
+}
 function walk(ctx) {
     return ts.forEachChild(ctx.sourceFile, function callback(node) {
         if (node.kind === ts.SyntaxKind.AnyKeyword) {
             if (isNodePartOfCastExpression(node) ||
-                isNodeTypeParameterForRestArguments(node)) {
+                isNodeTypeParameterForRestArguments(node) ||
+                isNodePartOfRestArguments(node)) {
                 return;
             }
             return ctx.addFailureAtNode(node, Rule.FAILURE_STRING, new Lint.Replacement(node.getStart(), node.getWidth(), 'unknown'));

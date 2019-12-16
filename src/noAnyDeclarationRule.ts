@@ -30,11 +30,19 @@ function isNodeTypeParameterForRestArguments(node: ts.Node): boolean {
         && node.parent.parent.kind === ts.SyntaxKind.TypeParameter
 }
 
+function isNodePartOfRestArguments(node: ts.Node): boolean {
+    while (node && !ts.isParameter(node)) {
+        node = node.parent
+    }
+    return node && typeof node.dotDotDotToken !== 'undefined'
+}
+
 function walk(ctx: Lint.WalkContext<{}>): void {
     return ts.forEachChild(ctx.sourceFile, function callback(node: ts.Node): void {
         if (node.kind === ts.SyntaxKind.AnyKeyword) {
             if (isNodePartOfCastExpression(node) ||
-                isNodeTypeParameterForRestArguments(node)) {
+                isNodeTypeParameterForRestArguments(node) ||
+                isNodePartOfRestArguments(node)) {
                 return
             }
             return ctx.addFailureAtNode(

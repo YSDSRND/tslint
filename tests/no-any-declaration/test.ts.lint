@@ -40,4 +40,14 @@ function x<T extends any>(arg: T) {
 function x<T extends any[]>(...args: T) {
 }
 
+function x(...args: any[]) {
+}
+
+function x(...args: Array<any>) {
+}
+
+function x(a: Array<any>) {
+                    ~~~ [0]
+}
+
 [0]: Do not use 'any' as a type declaration. Use a more specific type or '{}' if you do not care about type information.
